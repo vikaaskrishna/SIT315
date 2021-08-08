@@ -1,65 +1,29 @@
-// C++ code
-//
-#define trigPin 10
-
-#define echoPin 9
-
-#define led 11
-
+//c++
+bool state = false;
 void setup()
-
-{ Serial.begin (9600);
-
-pinMode(trigPin, OUTPUT);
-
-pinMode(echoPin, INPUT);
-
-pinMode(led, OUTPUT);
-
-attachInterrupt(digitalPinToInterrupt(2), buzz, CHANGE);
-}
-
-void loop()
-
-{ int duration, distance;
-
-digitalWrite(trigPin, LOW);
-
-delayMicroseconds(2);
-
-digitalWrite(trigPin, HIGH);
-
-delayMicroseconds(10);
-
-digitalWrite(trigPin, LOW);
-
-duration = pulseIn(echoPin, HIGH);
-
-distance = (duration/2) / 29.1;
-
-if (distance < 100)
-
-{ digitalWrite(led,HIGH);
-
-}
-
-else {
-
-digitalWrite(led,LOW);
-
-}
-
-Serial.print(distance);
-
-Serial.println(" cm");
-
-delay(500);
-
-}
-
-void buzz()
 {
-  digitalWrite(led,HIGH);
-  
-  Serial.println("interrupt");
+  Serial.begin(9600);
+  pinMode(2, OUTPUT);
+  pinMode(9,OUTPUT);
+  pinMode(3,INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(3), ledOnOff ,FALLING);
 }
+void loop()
+{  
+}
+ void ledOnOff()
+ { if(state==false)
+ { 
+  digitalWrite(2, HIGH);
+  digitalWrite(10,HIGH);
+  digitalWrite(10,LOW);
+  Serial.println("GREEN");
+  state=true;
+ }
+ else
+ { digitalWrite(2, LOW);
+   digitalWrite(10,HIGH);
+   Serial.println("RED");
+   state=false;
+ }
+ }
