@@ -1,71 +1,65 @@
-// C++ code
-//
-#define trigPin 10
-
-#define echoPin 9
-
-#define led1 6
-
-#define led2 13
-
-#define interrupt 2
-
+//c++
+bool lane1 = false;
+bool lane2 = false;
 void setup()
-
-{ Serial.begin (9600);
-
-pinMode(trigPin, OUTPUT);
-
-pinMode(echoPin, INPUT);
-
-pinMode(led1, OUTPUT);
- 
-pinMode(led2, OUTPUT);
-
-attachInterrupt(digitalPinToInterrupt(interrupt), gas, RISING);
-}
-
-void loop()
-
-{ int duration, distance;
-
-digitalWrite(trigPin, LOW);
-
-delayMicroseconds(2);
-
-digitalWrite(trigPin, HIGH);
-
-delayMicroseconds(10);
-
-digitalWrite(trigPin, LOW);
-
-duration = pulseIn(echoPin, HIGH);
-
-distance = (duration/2) / 29.1;
-
-if (distance < 100)
-
-{ digitalWrite(led1,HIGH);
-
-}
-
-else {
-
-digitalWrite(led1,LOW);
-
-}
-
-Serial.print(distance);
-
-Serial.println(" cm");
-
-delay(500);
-
-}
-
-void gas()
 {
-  digitalWrite(led2,HIGH);
+  Serial.begin(9600);
+  pinMode(4, OUTPUT);
+  pinMode(10,OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(8,OUTPUT);
   
-  Serial.println("WARNING GAS LEAK");
+  attachInterrupt(digitalPinToInterrupt(2), ledLane1 ,RISING);
+  attachInterrupt(digitalPinToInterrupt(3), ledLane2 ,RISING);
 }
+void loop()
+{  
+  if(lane1 == true)
+  {
+    if(lane2 == false)
+    {
+     digitalWrite(10, LOW);
+     digitalWrite(4, HIGH);
+     delay(10000);
+     digitalWrite(4, LOW);
+     lane1 = false;
+    } 
+  } 
+  else
+  {
+    digitalWrite(10, HIGH);
+    
+  }
+  if(lane2 == true)
+  {
+    if(lane1 == false)
+    {
+     digitalWrite(9, LOW);
+     digitalWrite(8, HIGH);
+     delay(10000);
+     digitalWrite(8, LOW);
+     lane2 = false;
+    } 
+  } 
+  else
+  {
+    digitalWrite(9, HIGH);
+  }
+}
+void ledLane1()
+ {
+  if(lane2 == false);
+  {
+    digitalWrite(9, HIGH);
+    lane1 = true;
+  } 
+ } 
+void ledLane2()
+ {
+  
+  if(lane1 == false);
+  {
+    digitalWrite(10, HIGH);
+    lane2 = true;
+  } 
+ } 
